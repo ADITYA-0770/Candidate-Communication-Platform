@@ -25,13 +25,15 @@ html, body, #root {
 
 .header-container {
     flex-shrink: 0;
-    height: 64px;
-    padding: 0 24px;
+    min-height: 64px;
+    padding: 10px 24px;
     border-bottom: 1px solid #EAEAEA;
     display: flex;
     align-items: center;
     justify-content: space-between;
     background: #FFFFFF;
+    gap: 16px;
+    flex-wrap: wrap;
 }
 
 .header-title-text {
@@ -39,12 +41,14 @@ html, body, #root {
     font-weight: 700;
     color: #111111;
     letter-spacing: -0.3px;
+    white-space: nowrap;
 }
 
 .header-buttons-row {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .btn-add-candidate-outlined {
@@ -203,7 +207,7 @@ html, body, #root {
     color: #212121;
     background: #FFFFFF;
     outline: none;
-    transition: border-color 0.15s;
+    transition: border-color 0.15s, width 0.2s;
 }
 
 .search-field:focus {
@@ -219,10 +223,12 @@ html, body, #root {
     overflow-y: auto;
     overflow-x: auto;
     background: #FFFFFF;
+    -webkit-overflow-scrolling: touch;
 }
 
 .data-grid-table {
     width: 100%;
+    min-width: 680px;
     border-collapse: collapse;
     text-align: left;
 }
@@ -291,6 +297,7 @@ html, body, #root {
     border-radius: 12px;
     font-size: 12px;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .status-badge.read {
@@ -337,8 +344,8 @@ html, body, #root {
 
 .bottom-footer-bar {
     flex-shrink: 0;
-    height: 48px;
-    padding: 0 24px;
+    min-height: 48px;
+    padding: 8px 24px;
     border-top: 1px solid #E0E0E0;
     background: #FFFFFF;
     display: flex;
@@ -347,6 +354,7 @@ html, body, #root {
     gap: 24px;
     font-size: 13px;
     color: #616161;
+    flex-wrap: wrap;
 }
 
 .footer-rows-selector {
@@ -403,6 +411,8 @@ html, body, #root {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 16px;
+    overflow-y: auto;
 }
 
 .side-drawer-overlay {
@@ -415,8 +425,8 @@ html, body, #root {
 }
 
 .drawer-card {
-    width: 580px;
-    max-width: 90vw;
+    width: 600px;
+    max-width: 100vw;
     height: 100%;
     background: #FFFFFF;
     box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
@@ -430,6 +440,7 @@ html, body, #root {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 12px;
 }
 
 .drawer-top-title {
@@ -488,11 +499,18 @@ html, body, #root {
 
 .dialog-box {
     width: 500px;
-    max-width: 90vw;
+    max-width: 100%;
+    max-height: 90vh;
     background: #FFFFFF;
     border-radius: 8px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.dialog-box-message {
+    width: 560px;
 }
 
 .dialog-header {
@@ -507,6 +525,7 @@ html, body, #root {
 
 .dialog-body {
     padding: 24px;
+    overflow-y: auto;
 }
 
 .dialog-footer {
@@ -571,3 +590,117 @@ html, body, #root {
     color: #FFFFFF;
 }
 
+@media (max-width: 1024px) {
+    .header-container {
+        padding: 12px 18px;
+    }
+    .header-title-text {
+        font-size: 20px;
+    }
+    .data-grid-table th,
+    .data-grid-table td {
+        padding: 10px 14px;
+    }
+}
+
+@media (max-width: 820px) {
+    .header-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 12px 16px;
+    }
+    .header-buttons-row {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .search-input-container {
+        flex: 1 1 100%;
+        order: -1;
+    }
+    .search-field {
+        width: 100%;
+    }
+    .btn-add-candidate-outlined,
+    .btn-delete-candidate,
+    .btn-send-message,
+    .btn-sync-status {
+        flex: 1 1 auto;
+        justify-content: center;
+        padding: 0 10px;
+        font-size: 11.5px;
+    }
+    .bottom-footer-bar {
+        padding: 10px 16px;
+        gap: 14px;
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 640px) {
+    .header-title-text {
+        font-size: 18px;
+    }
+    .btn-add-candidate-outlined,
+    .btn-delete-candidate,
+    .btn-send-message,
+    .btn-sync-status {
+        min-width: calc(50% - 6px);
+        font-size: 11px;
+    }
+    .drawer-card {
+        width: 100vw;
+        max-width: 100vw;
+        border-radius: 0;
+    }
+    .drawer-top-bar,
+    .drawer-content-scroll,
+    .drawer-bottom-actions {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+    .dialog-header,
+    .dialog-body,
+    .dialog-footer {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+    .toast-alert {
+        left: 14px;
+        right: 14px;
+        top: 14px;
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .btn-add-candidate-outlined,
+    .btn-delete-candidate,
+    .btn-send-message,
+    .btn-sync-status {
+        width: 100%;
+        min-width: 100%;
+    }
+    .bottom-footer-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .footer-nav-controls {
+        margin-left: 0;
+        width: 100%;
+        justify-content: space-between;
+    }
+    .dialog-footer,
+    .drawer-bottom-actions {
+        flex-direction: column-reverse;
+    }
+    .dialog-footer button,
+    .drawer-bottom-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+}

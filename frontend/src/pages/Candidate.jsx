@@ -801,7 +801,7 @@ function Candidate() {
 
             {isSendMessageOpen && (
                 <div className="modal-scrim-overlay" onClick={() => setIsSendMessageOpen(false)}>
-                    <div className="dialog-box" style={{ width: "560px" }} onClick={(e) => e.stopPropagation()}>
+                    <div className="dialog-box dialog-box-message" onClick={(e) => e.stopPropagation()}>
                         <div className="dialog-header">
                             <span>Send Message</span>
                             <button
@@ -900,7 +900,7 @@ function Candidate() {
 
             {isHistoryOpen && (
                 <div className="side-drawer-overlay" onClick={() => setIsHistoryOpen(false)}>
-                    <div className="drawer-card" style={{ width: "620px" }} onClick={(e) => e.stopPropagation()}>
+                    <div className="drawer-card" onClick={(e) => e.stopPropagation()}>
                         <div className="drawer-top-bar">
                             <div className="drawer-top-title">Communication history</div>
                             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
