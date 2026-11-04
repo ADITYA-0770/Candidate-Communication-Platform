@@ -1,17 +1,18 @@
 from pathlib import Path
 import os
+import urllib.parse
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv(BASE_DIR / ".env")
 
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-production-candidate-platform-2026")
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 ALLOWED_HOSTS = ["*"]
 
-GREEN_API_INSTANCE_ID = os.getenv("GREEN_API_INSTANCE_ID")
-GREEN_API_TOKEN = os.getenv("GREEN_API_TOKEN")
+GREEN_API_INSTANCE_ID = os.getenv("GREEN_API_INSTANCE_ID", "")
+GREEN_API_TOKEN = os.getenv("GREEN_API_TOKEN", "")
 GREEN_API_HOST = os.getenv("GREEN_API_HOST", "https://api.green-api.com")
 
 INSTALLED_APPS = [
@@ -38,6 +39,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+try:
+    import whitenoise
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+except ImportError:
+    pass
+
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
@@ -63,25 +70,52 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+db_url = os.getenv("DATABASE_URL")
+if db_url:
+    parsed = urllib.parse.urlparse(db_url)
+    db_name = parsed.path.lstrip("/")
+    db_user = parsed.username
+    db_pass = parsed.password
+    db_host = parsed.hostname
+    db_port = str(parsed.port or 5432)
+    db_query = urllib.parse.parse_qs(parsed.query)
+    sslmode = db_query.get("sslmode", [""])[0] or os.getenv("DB_SSLMODE", "")
+else:
+    db_name = os.getenv("DB_NAME", "")
+    db_user = os.getenv("DB_USER", "")
+    db_pass = os.getenv("DB_PASSWORD", "")
+    db_host = os.getenv("DB_HOST", "")
+    db_port = os.getenv("DB_PORT", "5432")
+    sslmode = os.getenv("DB_SSLMODE", "")
+
 db_options = {}
-sslmode = os.getenv("DB_SSLMODE")
+if not sslmode and db_host and "aivencloud.com" in db_host:
+    sslmode = "require"
 if sslmode:
     db_options["sslmode"] = sslmode
 ca_path = BASE_DIR / "ca.pem"
 if ca_path.exists():
     db_options["sslrootcert"] = str(ca_path)
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME"),
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT"),
-        "OPTIONS": db_options,
+if db_name and db_host:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": db_name,
+            "USER": db_user,
+            "PASSWORD": db_pass,
+            "HOST": db_host,
+            "PORT": db_port,
+            "OPTIONS": db_options,
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -104,6 +138,13 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+try:
+    import whitenoise
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+except ImportError:
+    pass
 
 MAILERS = {
     'default': {
