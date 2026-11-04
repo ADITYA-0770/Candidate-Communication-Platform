@@ -61,6 +61,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+db_options = {}
+sslmode = os.getenv("DB_SSLMODE")
+if sslmode:
+    db_options["sslmode"] = sslmode
+ca_path = BASE_DIR / "ca.pem"
+if ca_path.exists():
+    db_options["sslrootcert"] = str(ca_path)
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -69,6 +77,7 @@ DATABASES = {
         "PASSWORD": os.getenv("DB_PASSWORD"),
         "HOST": os.getenv("DB_HOST"),
         "PORT": os.getenv("DB_PORT"),
+        "OPTIONS": db_options,
     }
 }
 
