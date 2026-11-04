@@ -36,6 +36,12 @@ html, body, #root {
     flex-wrap: wrap;
 }
 
+.header-brand-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .header-title-text {
     font-size: 22px;
     font-weight: 700;

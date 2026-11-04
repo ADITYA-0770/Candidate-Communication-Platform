@@ -2,6 +2,23 @@ import React, { useState, useEffect, useMemo } from "react";
 import api from "../api/axios";
 import "./Candidate.css";
 
+const BrandLogoIcon = () => (
+    <svg width="28" height="28" viewBox="0 0 64 64" fill="none">
+        <defs>
+            <linearGradient id="navBrandGrad" x1="4" y1="4" x2="60" y2="60" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor="#2196F3" />
+                <stop offset="100%" stopColor="#1565C0" />
+            </linearGradient>
+        </defs>
+        <rect x="4" y="4" width="56" height="46" rx="14" fill="url(#navBrandGrad)" />
+        <path d="M14 50 L10 59 C9.5 60.2 10.8 61.2 11.9 60.5 L24 50 Z" fill="url(#navBrandGrad)" />
+        <circle cx="32" cy="22" r="7.5" fill="#FFFFFF" />
+        <path d="M20 40 C20 34 25.4 32.5 32 32.5 C38.6 32.5 44 34 44 40 C44 41 43 41.5 41.8 41.5 L22.2 41.5 C21 41.5 20 41 20 40 Z" fill="#FFFFFF" />
+        <circle cx="47" cy="13" r="6.5" fill="#4CAF50" stroke="#FFFFFF" strokeWidth="2" />
+        <path d="M44.5 13 L46.2 14.7 L49.5 11.3" stroke="#FFFFFF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+);
+
 const SearchIcon = () => (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#757575" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="11" cy="11" r="7.5" />
@@ -459,7 +476,10 @@ function Candidate() {
             )}
 
             <header className="header-container">
-                <div className="header-title-text">Candidate communication</div>
+                <div className="header-brand-container">
+                    <BrandLogoIcon />
+                    <div className="header-title-text">Candidate communication</div>
+                </div>
 
                 <div className="header-buttons-row">
                     <button className="btn-add-candidate-outlined" onClick={handleOpenAdd}>
