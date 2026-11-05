@@ -10,3 +10,4 @@ if str(BASE_DIR) not in sys.path:
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
 application = get_wsgi_application()
+
