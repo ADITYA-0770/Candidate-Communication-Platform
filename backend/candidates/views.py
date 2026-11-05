@@ -10,7 +10,7 @@ from messaging.services import sync_whatsapp_statuses
 class CandidateView(APIView):
     
     def get(self, request):
-        if request.query_params.get("sync") != "false":
+        if request.query_params.get("sync") == "true":
             try:
                 sync_whatsapp_statuses()
             except Exception:

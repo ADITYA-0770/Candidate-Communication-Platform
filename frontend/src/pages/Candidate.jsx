@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import api from "../api/axios";
 import "./Candidate.css";
 
@@ -122,10 +122,14 @@ function Candidate() {
         setTimeout(() => setToast(null), 3500);
     };
 
+    const isFetchingRef = useRef(false);
+
     const fetchCandidates = async (query = "", silent = false) => {
+        if (isFetchingRef.current) return;
+        isFetchingRef.current = true;
         if (!silent) setLoading(true);
         try {
-            const params = {};
+            const params = { sync: "false" };
             if (query) params.search = query;
 
             const response = await api.get("candidates/", { params });
@@ -134,6 +138,7 @@ function Candidate() {
         } catch (error) {
             if (!silent) showToast("Failed to fetch candidates", "error");
         } finally {
+            isFetchingRef.current = false;
             if (!silent) setLoading(false);
         }
     };
@@ -181,12 +186,13 @@ function Candidate() {
 
     useEffect(() => {
         const interval = setInterval(() => {
+            if (typeof document !== "undefined" && document.hidden) return;
             if (isHistoryOpen && historyCandidate) {
                 fetchCommunicationHistory(historyCandidate, true);
             } else {
                 fetchCandidates(search, true);
             }
-        }, 5000);
+        }, 12000);
         return () => clearInterval(interval);
     }, [isHistoryOpen, historyCandidate, search]);
 
