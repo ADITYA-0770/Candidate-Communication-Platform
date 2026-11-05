@@ -2,6 +2,8 @@
 
 A full-stack recruitment communication platform designed for talent acquisition teams to manage candidate pipelines, dispatch targeted WhatsApp notifications individually or in bulk, track live delivery status progressions, and handle message delivery retries.
 
+> 📄 **Architecture & Interviewer Summary**: For a complete visual presentation, design trade-offs, and evaluation criteria, see [docs/Candidate_Communication_Platform_Summary.pdf](docs/Candidate_Communication_Platform_Summary.pdf).
+
 ---
 
 ## 1. System Architecture
